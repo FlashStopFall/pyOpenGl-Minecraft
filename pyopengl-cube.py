@@ -4,6 +4,8 @@ from pygame.locals import *
 from OpenGL.GL import *
 from OpenGL.GLU import *
 
+import math
+
 
 
 def tex_coord(x, y, n=4):
@@ -43,14 +45,14 @@ BLOCK1 = tex_coords((3, 0), (3, 0), (3, 0))
 
 def verts(x, y, z, n):
     vertices = (
+        (-1+(2*x), -1+(2*y), -1+(2*z)),
         (1+(2*x), -1+(2*y), -1+(2*z)),
         (1+(2*x), 1+(2*y), -1+(2*z)),
         (-1+(2*x), 1+(2*y), -1+(2*z)),
-        (-1+(2*x), -1+(2*y), -1+(2*z)),
-        (1+(2*x), -1+(2*y), 1+(2*z)),
-        (1+(2*x), 1+(2*y), 1+(2*z)),
         (-1+(2*x), -1+(2*y), 1+(2*z)),
-        (-1+(2*x), 1+(2*y), 1+(2*z))
+        (1+(2*x), -1+(2*y), 1+(2*z)),
+        (-1+(2*x), 1+(2*y), 1+(2*z)),
+        (1+(2*x), 1+(2*y), 1+(2*z)),
         )
     return(vertices)
 
@@ -97,7 +99,7 @@ surfaces = (
     (4,0,3,6)
     )
 
-forced=True
+forced=False
 
 def Cube(vx,vy,vz,block):
     if not forced:
@@ -110,11 +112,12 @@ def Cube(vx,vy,vz,block):
                 x+=1
                 #glColor3fv(colors[x])
                 glTexCoord2f(block[y-1][2*(x-1)], block[y-1][(2*x)-1])
+                #print(block[y-1][2*(x-1)], block[y-1][(2*x)-1])
                 glVertex3fv(verts(vx,vy,vz,1)[vertex])
         glEnd()
 
 
-
+        
         glBegin(GL_LINES)
         for edge in edges:
             for vertex in edge:
@@ -213,7 +216,16 @@ def main():
     ##glShadeModel(GL_SMOOTH)
     glDepthRange(0.0,1.0)
 
+    glMatrixMode(GL_PROJECTION)
     gluPerspective(45, (display[0]/display[1]), 0.1, 50.0)
+
+    glMatrixMode(GL_MODELVIEW)
+    gluLookAt(0, -8, 0, 0, 0, 0, 0, 0, 1)
+    viewMatrix = glGetFloatv(GL_MODELVIEW_MATRIX)
+    glLoadIdentity()
+
+
+
 
     glTranslatef(0,0, -10)
 
@@ -224,6 +236,13 @@ def main():
 
     run = True
     while run:
+        # init model view matrix
+        glLoadIdentity()
+
+          # init the view matrix
+        glPushMatrix()
+        glLoadIdentity()
+        
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -268,6 +287,14 @@ def main():
                     glTranslatef(0,0,-1.0)
 
         #glRotatef(1, 3, 1, 1)
+        # multiply the current matrix by the get the new view matrix and store the final vie matrix 
+        glMultMatrixf(viewMatrix)
+        viewMatrix = glGetFloatv(GL_MODELVIEW_MATRIX)
+
+        # apply view matrix
+        glPopMatrix()
+        glMultMatrixf(viewMatrix)
+
         glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
         Cube(0,0,0,BLOCK1)
         Cube(1,0,0,BLOCK1)
