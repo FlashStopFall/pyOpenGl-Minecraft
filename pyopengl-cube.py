@@ -83,6 +83,7 @@ def Cube(vx,vy,vz):
     glEnd()
 
 
+
     glBegin(GL_LINES)
     for edge in edges:
         for vertex in edge:
@@ -93,6 +94,18 @@ def main():
     pygame.init()
     display = (800,600)
     pygame.display.set_mode(display, DOUBLEBUF|OPENGL)
+
+    glClearColor(0.0, 0.0, 0.0, 0.0)
+    glClearDepth(1.0)
+
+    glDepthMask(GL_TRUE)
+    glDepthFunc(GL_LESS)
+    glEnable(GL_DEPTH_TEST)
+    glEnable(GL_CULL_FACE)
+    glCullFace(GL_FRONT)
+    #glFrontFace(GL_CCW)
+    #glShadeModel(GL_SMOOTH)
+    glDepthRange(0.0,1.0)
 
     gluPerspective(45, (display[0]/display[1]), 0.1, 50.0)
 
