@@ -13,7 +13,7 @@ from OpenGL.GLU import *
 
 
 
-def tex_coord(x, y, n=1):
+def tex_coord(x, y, n=4):
     """ Return the bounding vertices of the texture square.
 
     """
@@ -44,7 +44,7 @@ def tex_coords(top, bottom, side):
     result.extend(side * 4)"""
     return result
 #block type names and location on template go here
-WOOD = tex_coords((0, 0), (0, 0), (0, 0))
+BLOCK1 = tex_coords((2, 0), (2, 0), (2, 0))
 
 
 def verts(x, y, z, n):
@@ -180,7 +180,7 @@ def Cube(vx,vy,vz,block):
 
 
 def loadTexture():
-    textureSurface = pygame.image.load('wood.png')
+    textureSurface = pygame.image.load('texture.png')
     textureData = pygame.image.tostring(textureSurface, "RGBA", 1)
     width = textureSurface.get_width()
     height = textureSurface.get_height()
@@ -271,11 +271,11 @@ def main():
 
         #glRotatef(1, 3, 1, 1)
         glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
-        Cube(0,0,0,WOOD)
-        Cube(1,0,0,WOOD)
-        Cube(0,1,0,WOOD)
-        Cube(0,0,1,WOOD)
-        Cube(-2,0,0,WOOD)
+        Cube(0,0,0,BLOCK1)
+        Cube(1,0,0,BLOCK1)
+        Cube(0,1,0,BLOCK1)
+        Cube(0,0,1,BLOCK1)
+        Cube(-2,0,0,BLOCK1)
         pygame.display.flip()
         pygame.time.wait(10)
 
