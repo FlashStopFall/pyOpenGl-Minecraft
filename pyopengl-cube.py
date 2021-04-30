@@ -5,6 +5,48 @@ from OpenGL.GL import *
 from OpenGL.GLU import *
 
 
+
+
+
+
+
+
+
+
+def tex_coord(x, y, n=1):
+    """ Return the bounding vertices of the texture square.
+
+    """
+    m = 1.0 / n
+    dx = x * m
+    dy = y * m
+    return dx, dy, dx + m, dy, dx + m, dy + m, dx, dy + m
+
+
+def tex_coords(top, bottom, side):
+    """ Return a list of the texture squares for the top, bottom and side.
+
+    """
+    top = tex_coord(*top)
+    bottom = tex_coord(*bottom)
+    side = tex_coord(*side)
+    result = [
+        (top),
+        (bottom),
+        (side),
+        (side),
+        (side),
+        (side),
+    ]
+    """result = []
+    result.extend(top)
+    result.extend(bottom)
+    result.extend(side * 4)"""
+    return result
+#block type names and location on template go here
+WOOD = tex_coords((0, 0), (0, 0), (0, 0))
+
+
 def verts(x, y, z, n):
     vertices = (
         (1+(2*x), -1+(2*y), -1+(2*z)),
@@ -63,15 +105,17 @@ surfaces = (
 
 forced=False
 
-def Cube(vx,vy,vz):
-    if forced:
+def Cube(vx,vy,vz,block):
+    if not forced:
         glBegin(GL_QUADS)
+        y = 0
         for surface in surfaces:
             x = 0
+            y+=1
             for vertex in surface:
                 x+=1
-                glColor3fv(colors[x])
-                #glTexCoord2f(0.0, 0.0)
+                #glColor3fv(colors[x])
+                glTexCoord2f(block[y-1][2*(x-1)], block[y-1][(2*x)-1])
                 glVertex3fv(verts(vx,vy,vz,1)[vertex])
         glEnd()
 
@@ -84,7 +128,7 @@ def Cube(vx,vy,vz):
         glEnd()
     else:
         glBegin(GL_QUADS)
-        glTexCoord2f(0.0, 0.0)
+        glTexCoord2f(WOOD[0][0], WOOD[0][1])
         glVertex3f(-1.0, -1.0,  1.0)
         glTexCoord2f(1.0, 0.0)
         glVertex3f(1.0, -1.0,  1.0)
@@ -168,7 +212,7 @@ def main():
     glDepthFunc(GL_LESS)
     glEnable(GL_DEPTH_TEST)
     glEnable(GL_CULL_FACE)
-    glCullFace(GL_BACK)
+    glCullFace(GL_FRONT)
     #glFrontFace(GL_CCW)
     #glShadeModel(GL_SMOOTH)
     glDepthRange(0.0,1.0)
@@ -227,11 +271,11 @@ def main():
 
         #glRotatef(1, 3, 1, 1)
         glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
-        Cube(0,0,0)
-        Cube(1,0,0)
-        Cube(0,1,0)
-        Cube(0,0,1)
-        Cube(-2,0,0)
+        Cube(0,0,0,WOOD)
+        Cube(1,0,0,WOOD)
+        Cube(0,1,0,WOOD)
+        Cube(0,0,1,WOOD)
+        Cube(-2,0,0,WOOD)
         pygame.display.flip()
         pygame.time.wait(10)
 
