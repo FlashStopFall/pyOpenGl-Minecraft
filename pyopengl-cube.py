@@ -3,18 +3,8 @@ from pygame.locals import *
 
 from OpenGL.GL import *
 from OpenGL.GLU import *
-"""
-verticies = (
-    (1, -1, -1),
-    (1, 1, -1),
-    (-0, 0, -0),
-    (-1, -1, -1),
-    (1, -1, 1),
-    (1, 1, 1),
-    (-1, -1, 1),
-    (-1, 1, 1)
-    )
-"""
+
+
 def verts(x, y, z, n):
     vertices = (
         (1+(2*x), -1+(2*y), -1+(2*z)),
@@ -71,24 +61,100 @@ surfaces = (
     (4,0,3,6)
     )
 
+forced=False
 
 def Cube(vx,vy,vz):
-    glBegin(GL_QUADS)
-    for surface in surfaces:
-        x = 0
-        for vertex in surface:
-            x+=1
-            glColor3fv(colors[x])
-            glVertex3fv(verts(vx,vy,vz,1)[vertex])
-    glEnd()
+    if forced:
+        glBegin(GL_QUADS)
+        for surface in surfaces:
+            x = 0
+            for vertex in surface:
+                x+=1
+                glColor3fv(colors[x])
+                #glTexCoord2f(0.0, 0.0)
+                glVertex3fv(verts(vx,vy,vz,1)[vertex])
+        glEnd()
 
 
 
-    glBegin(GL_LINES)
-    for edge in edges:
-        for vertex in edge:
-            glVertex3fv(verts(vx,vy,vz,1)[vertex])
-    glEnd()
+        glBegin(GL_LINES)
+        for edge in edges:
+            for vertex in edge:
+                glVertex3fv(verts(vx,vy,vz,1)[vertex])
+        glEnd()
+    else:
+        glBegin(GL_QUADS)
+        glTexCoord2f(0.0, 0.0)
+        glVertex3f(-1.0, -1.0,  1.0)
+        glTexCoord2f(1.0, 0.0)
+        glVertex3f(1.0, -1.0,  1.0)
+        glTexCoord2f(1.0, 1.0)
+        glVertex3f(1.0,  1.0,  1.0)
+        glTexCoord2f(0.0, 1.0)
+        glVertex3f(-1.0,  1.0,  1.0)
+        glTexCoord2f(1.0, 0.0)
+        glVertex3f(-1.0, -1.0, -1.0)
+        glTexCoord2f(1.0, 1.0)
+        glVertex3f(-1.0,  1.0, -1.0)
+        glTexCoord2f(0.0, 1.0)
+        glVertex3f(1.0,  1.0, -1.0)
+        glTexCoord2f(0.0, 0.0)
+        glVertex3f(1.0, -1.0, -1.0)
+        glTexCoord2f(0.0, 1.0)
+        glVertex3f(-1.0,  1.0, -1.0)
+        glTexCoord2f(0.0, 0.0)
+        glVertex3f(-1.0,  1.0,  1.0)
+        glTexCoord2f(1.0, 0.0)
+        glVertex3f(1.0,  1.0,  1.0)
+        glTexCoord2f(1.0, 1.0)
+        glVertex3f(1.0,  1.0, -1.0)
+        glTexCoord2f(1.0, 1.0)
+        glVertex3f(-1.0, -1.0, -1.0)
+        glTexCoord2f(0.0, 1.0)
+        glVertex3f(1.0, -1.0, -1.0)
+        glTexCoord2f(0.0, 0.0)
+        glVertex3f(1.0, -1.0,  1.0)
+        glTexCoord2f(1.0, 0.0)
+        glVertex3f(-1.0, -1.0,  1.0)
+        glTexCoord2f(1.0, 0.0)
+        glVertex3f(1.0, -1.0, -1.0)
+        glTexCoord2f(1.0, 1.0)
+        glVertex3f(1.0,  1.0, -1.0)
+        glTexCoord2f(0.0, 1.0)
+        glVertex3f(1.0,  1.0,  1.0)
+        glTexCoord2f(0.0, 0.0)
+        glVertex3f(1.0, -1.0,  1.0)
+        glTexCoord2f(0.0, 0.0)
+        glVertex3f(-1.0, -1.0, -1.0)
+        glTexCoord2f(1.0, 0.0)
+        glVertex3f(-1.0, -1.0,  1.0)
+        glTexCoord2f(1.0, 1.0)
+        glVertex3f(-1.0,  1.0,  1.0)
+        glTexCoord2f(0.0, 1.0)
+        glVertex3f(-1.0,  1.0, -1.0)
+        glEnd()
+
+
+def loadTexture():
+    textureSurface = pygame.image.load('wood.png')
+    textureData = pygame.image.tostring(textureSurface, "RGBA", 1)
+    width = textureSurface.get_width()
+    height = textureSurface.get_height()
+
+    glEnable(GL_TEXTURE_2D)
+    texid = glGenTextures(1)
+
+    glBindTexture(GL_TEXTURE_2D, texid)
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height,
+                 0, GL_RGBA, GL_UNSIGNED_BYTE, textureData)
+
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT)
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT)
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST)
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST)
+
+    return texid
+    
 
 def main():
     pygame.init()
@@ -102,7 +168,7 @@ def main():
     glDepthFunc(GL_LESS)
     glEnable(GL_DEPTH_TEST)
     glEnable(GL_CULL_FACE)
-    glCullFace(GL_FRONT)
+    glCullFace(GL_BACK)
     #glFrontFace(GL_CCW)
     #glShadeModel(GL_SMOOTH)
     glDepthRange(0.0,1.0)
@@ -113,7 +179,7 @@ def main():
 
     glRotatef(25, 2, 1, 0)
 
-
+    loadTexture()
     
     while True:
         for event in pygame.event.get():
