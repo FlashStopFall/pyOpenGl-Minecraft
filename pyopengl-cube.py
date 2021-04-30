@@ -6,13 +6,6 @@ from OpenGL.GLU import *
 
 
 
-
-
-
-
-
-
-
 def tex_coord(x, y, n=4):
     """ Return the bounding vertices of the texture square.
 
@@ -43,8 +36,9 @@ def tex_coords(top, bottom, side):
     result.extend(bottom)
     result.extend(side * 4)"""
     return result
+
 #block type names and location on template go here
-BLOCK1 = tex_coords((2, 0), (2, 0), (2, 0))
+BLOCK1 = tex_coords((3, 0), (3, 0), (3, 0))
 
 
 def verts(x, y, z, n):
@@ -103,7 +97,7 @@ surfaces = (
     (4,0,3,6)
     )
 
-forced=False
+forced=True
 
 def Cube(vx,vy,vz,block):
     if not forced:
@@ -127,60 +121,62 @@ def Cube(vx,vy,vz,block):
                 glVertex3fv(verts(vx,vy,vz,1)[vertex])
         glEnd()
     else:
+        texX = 0.75
+        texY = 0.25
         glBegin(GL_QUADS)
-        glTexCoord2f(WOOD[0][0], WOOD[0][1])
+        glTexCoord2f(0.0+texX, 0.0)
         glVertex3f(-1.0, -1.0,  1.0)
-        glTexCoord2f(1.0, 0.0)
+        glTexCoord2f(0.25+texX, 0.0)
         glVertex3f(1.0, -1.0,  1.0)
-        glTexCoord2f(1.0, 1.0)
+        glTexCoord2f(0.25+texX, 0.25)
         glVertex3f(1.0,  1.0,  1.0)
-        glTexCoord2f(0.0, 1.0)
+        glTexCoord2f(0.0+texX, 0.25)
         glVertex3f(-1.0,  1.0,  1.0)
-        glTexCoord2f(1.0, 0.0)
+        """glTexCoord2f(texX, 0.0)
         glVertex3f(-1.0, -1.0, -1.0)
-        glTexCoord2f(1.0, 1.0)
+        glTexCoord2f(texX, texY)
         glVertex3f(-1.0,  1.0, -1.0)
-        glTexCoord2f(0.0, 1.0)
+        glTexCoord2f(0.0, texY)
         glVertex3f(1.0,  1.0, -1.0)
         glTexCoord2f(0.0, 0.0)
         glVertex3f(1.0, -1.0, -1.0)
-        glTexCoord2f(0.0, 1.0)
+        glTexCoord2f(0.0, texY)
         glVertex3f(-1.0,  1.0, -1.0)
         glTexCoord2f(0.0, 0.0)
         glVertex3f(-1.0,  1.0,  1.0)
-        glTexCoord2f(1.0, 0.0)
+        glTexCoord2f(texX, 0.0)
         glVertex3f(1.0,  1.0,  1.0)
-        glTexCoord2f(1.0, 1.0)
+        glTexCoord2f(texX, texY)
         glVertex3f(1.0,  1.0, -1.0)
-        glTexCoord2f(1.0, 1.0)
+        glTexCoord2f(texX, texY)
         glVertex3f(-1.0, -1.0, -1.0)
-        glTexCoord2f(0.0, 1.0)
+        glTexCoord2f(0.0, texY)
         glVertex3f(1.0, -1.0, -1.0)
         glTexCoord2f(0.0, 0.0)
         glVertex3f(1.0, -1.0,  1.0)
-        glTexCoord2f(1.0, 0.0)
+        glTexCoord2f(texX, 0.0)
         glVertex3f(-1.0, -1.0,  1.0)
-        glTexCoord2f(1.0, 0.0)
+        glTexCoord2f(texX, 0.0)
         glVertex3f(1.0, -1.0, -1.0)
-        glTexCoord2f(1.0, 1.0)
+        glTexCoord2f(texX, texY)
         glVertex3f(1.0,  1.0, -1.0)
-        glTexCoord2f(0.0, 1.0)
+        glTexCoord2f(0.0, texY)
         glVertex3f(1.0,  1.0,  1.0)
         glTexCoord2f(0.0, 0.0)
         glVertex3f(1.0, -1.0,  1.0)
         glTexCoord2f(0.0, 0.0)
         glVertex3f(-1.0, -1.0, -1.0)
-        glTexCoord2f(1.0, 0.0)
+        glTexCoord2f(texX, 0.0)
         glVertex3f(-1.0, -1.0,  1.0)
-        glTexCoord2f(1.0, 1.0)
+        glTexCoord2f(texX, texY)
         glVertex3f(-1.0,  1.0,  1.0)
-        glTexCoord2f(0.0, 1.0)
-        glVertex3f(-1.0,  1.0, -1.0)
+        glTexCoord2f(0.0, texY)
+        glVertex3f(-1.0,  1.0, -1.0)"""
         glEnd()
 
 
 def loadTexture():
-    textureSurface = pygame.image.load('texture.png')
+    textureSurface = pygame.image.load('texture2.png')
     textureData = pygame.image.tostring(textureSurface, "RGBA", 1)
     width = textureSurface.get_width()
     height = textureSurface.get_height()
@@ -211,10 +207,10 @@ def main():
     glDepthMask(GL_TRUE)
     glDepthFunc(GL_LESS)
     glEnable(GL_DEPTH_TEST)
-    glEnable(GL_CULL_FACE)
-    glCullFace(GL_FRONT)
-    #glFrontFace(GL_CCW)
-    #glShadeModel(GL_SMOOTH)
+    #glEnable(GL_CULL_FACE)
+    #glCullFace(GL_FRONT)
+    ##glFrontFace(GL_CCW)
+    ##glShadeModel(GL_SMOOTH)
     glDepthRange(0.0,1.0)
 
     gluPerspective(45, (display[0]/display[1]), 0.1, 50.0)
@@ -224,8 +220,10 @@ def main():
     glRotatef(25, 2, 1, 0)
 
     loadTexture()
-    
-    while True:
+
+
+    run = True
+    while run:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
