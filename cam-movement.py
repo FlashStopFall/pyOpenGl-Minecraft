@@ -6,8 +6,90 @@ from OpenGL.GLU import *
 
 import math
 
+
+
+def verts(x, y, z, n):
+    vertices = (
+        (1+(2*x), -1+(2*y), -1+(2*z)),
+        (1+(2*x), 1+(2*y), -1+(2*z)),
+        (-1+(2*x), 1+(2*y), -1+(2*z)),
+        (-1+(2*x), -1+(2*y), -1+(2*z)),
+        (1+(2*x), -1+(2*y), 1+(2*z)),
+        (1+(2*x), 1+(2*y), 1+(2*z)),
+        (-1+(2*x), -1+(2*y), 1+(2*z)),
+        (-1+(2*x), 1+(2*y), 1+(2*z))
+        )
+    return(vertices)
+
+print(verts(0, 0, 0, 1))
+
+
+
+edges = (
+    (0,1),
+    (0,3),
+    (0,4),
+    (2,1),
+    (2,3),
+    (2,7),
+    (6,3),
+    (6,4),
+    (6,7),
+    (5,1),
+    (5,4),
+    (5,7)
+    )
+
+colors = (
+    (1,0,0),
+    (0,1,0),
+    (0,0,1),
+    (0,1,0),
+    (1,1,1),
+    (0,1,1),
+    (1,0,0),
+    (0,1,0),
+    (0,0,1),
+    (1,0,0),
+    (1,1,1),
+    (0,1,1),
+    )
+
+surfaces = (
+    (0,1,2,3),
+    (3,2,7,6),
+    (6,7,5,4),
+    (4,5,1,0),
+    (1,5,7,2),
+    (4,0,3,6)
+    )
+
+
+def Cube(vx,vy,vz):
+    glBegin(GL_QUADS)
+    for surface in surfaces:
+        x = 0
+        for vertex in surface:
+            x+=1
+            glColor3fv(colors[x])
+            glVertex3fv(verts(vx,vy,vz,1)[vertex])
+    glEnd()
+
+    """
+    glBegin(GL_LINES)
+    for edge in edges:
+        for vertex in edge:
+            glVertex3fv(verts(vx,vy,vz,1)[vertex])
+    glEnd()"""
+
+
+
+
+
+
+
 pygame.init()
-display = (400, 300)
+display = (800, 600)
 scree = pygame.display.set_mode(display, DOUBLEBUF | OPENGL)
 
 glEnable(GL_DEPTH_TEST)
@@ -78,6 +160,10 @@ while run:
             glTranslatef(-0.1,0,0)
         if keypress[pygame.K_a]:
             glTranslatef(0.1,0,0)
+        if keypress[pygame.K_LSHIFT]:
+            glTranslatef(0,0.5,0)
+        if keypress[pygame.K_SPACE]:
+            glTranslatef(0,-0.5,0)
 
         # apply the left and right rotation
         glRotatef(mouseMove[0]*0.1, 0.0, 1.0, 0.0)
@@ -95,6 +181,14 @@ while run:
         glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
 
         glPushMatrix()
+
+
+
+        Cube(0,0,0)
+        Cube(1,0,0)
+        Cube(0,1,0)
+        Cube(0,0,1)
+        Cube(-2,0,0)
 
         glColor4f(0.5, 0.5, 0.5, 1)
         glBegin(GL_QUADS)
