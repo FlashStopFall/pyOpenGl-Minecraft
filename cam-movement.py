@@ -14,97 +14,11 @@ import sys
 BLOCK1 = functions.tex_coords((3, 0), (3, 0), (3, 0))
 
 
-
-
-def verts(x, y, z, n):
-    vertices = (
-        (1+(2*x), -1+(2*y), -1+(2*z)),
-        (1+(2*x), 1+(2*y), -1+(2*z)),
-        (-1+(2*x), 1+(2*y), -1+(2*z)),
-        (-1+(2*x), -1+(2*y), -1+(2*z)),
-        (1+(2*x), -1+(2*y), 1+(2*z)),
-        (1+(2*x), 1+(2*y), 1+(2*z)),
-        (-1+(2*x), -1+(2*y), 1+(2*z)),
-        (-1+(2*x), 1+(2*y), 1+(2*z))
-        )
-    return(vertices)
-
-print(verts(0, 0, 0, 1))
-
-
-
-edges = (
-    (0,1),
-    (0,3),
-    (0,4),
-    (2,1),
-    (2,3),
-    (2,7),
-    (6,3),
-    (6,4),
-    (6,7),
-    (5,1),
-    (5,4),
-    (5,7)
-    )
-
-colors = (
-    (1,0,0),
-    (0,1,0),
-    (0,0,1),
-    (0,1,0),
-    (1,1,1),
-    (0,1,1),
-    (1,0,0),
-    (0,1,0),
-    (0,0,1),
-    (1,0,0),
-    (1,1,1),
-    (0,1,1),
-    )
-
-surfaces = (
-    (0,1,2,3),
-    (3,2,7,6),
-    (6,7,5,4),
-    (4,5,1,0),
-    (1,5,7,2),
-    (4,0,3,6)
-    )
-
-
-def Cube(vx,vy,vz):
-    glBegin(GL_QUADS)
-    for surface in surfaces:
-        x = 0
-        for vertex in surface:
-            x+=1
-            glColor3fv(colors[x])
-            glVertex3fv(verts(vx,vy,vz,1)[vertex])
-    glEnd()
-
-    """
-    glBegin(GL_LINES)
-    for edge in edges:
-        for vertex in edge:
-            glVertex3fv(verts(vx,vy,vz,1)[vertex])
-    glEnd()"""
-
-
-
-
-
-
-
 pygame.init()
 display = (800, 600)
-<<<<<<< HEAD
 scree = pygame.display.set_mode(display, RESIZABLE | DOUBLEBUF | OPENGL)
 clock = pygame.time.Clock()
 
-=======
-scree = pygame.display.set_mode(display, DOUBLEBUF | OPENGL)
->>>>>>> 81640d852cea0e5e7f83e551f8df1ff96492ec8f
 
 glEnable(GL_DEPTH_TEST)
 glEnable(GL_LIGHTING)
@@ -218,7 +132,6 @@ while run:
 
         glPushMatrix()
 
-<<<<<<< HEAD
         glEnable(GL_CULL_FACE)
         glCullFace(GL_FRONT)
         glEnable(GL_TEXTURE_2D)
@@ -230,16 +143,6 @@ while run:
 
         glDisable(GL_CULL_FACE)
         glDisable(GL_TEXTURE_2D)
-=======
-
-
-        Cube(0,0,0)
-        Cube(1,0,0)
-        Cube(0,1,0)
-        Cube(0,0,1)
-        Cube(-2,0,0)
-
->>>>>>> 81640d852cea0e5e7f83e551f8df1ff96492ec8f
         glColor4f(0.5, 0.5, 0.5, 1)
         glBegin(GL_QUADS)
         glVertex3f(-10, -10, -1)
@@ -265,6 +168,6 @@ while run:
         clock.tick(60)
         pygame.display.flip()
         print(clock.get_fps())
-        pygame.time.wait(10)
+        #pygame.time.wait(10)
 
 pygame.quit()
