@@ -12,7 +12,10 @@ def tex_coord(x, y, n=4):
     dx = x * m
     dy = y * m
     return dx, dy, dx + m, dy, dx + m, dy + m, dx, dy + m
-
+#
+    #Should switch to something like this:
+    #return (dx, dy), (dx + m), (dy, dx + m), (dy + m), (dx, dy + m)
+    #would require a change in the way Cube() calls block. ("block[][]" currently)
 
 def tex_coords(top, bottom, side):
     """ Return a list of the texture squares for the top, bottom and side.
@@ -29,10 +32,6 @@ def tex_coords(top, bottom, side):
         (side),
         (side),
     ]
-    """result = []
-    result.extend(top)
-    result.extend(bottom)
-    result.extend(side * 4)"""
     return result
 
 
@@ -44,16 +43,16 @@ def verts(x, y, z, n):
     vertices = (
         (1+(2*x), -1+(2*y), -1+(2*z)),
         (1+(2*x), 1+(2*y), -1+(2*z)),
-        (-1+(2*x), 1+(2*y), -1+(2*z)),
-        (-1+(2*x), -1+(2*y), -1+(2*z)),
-        (1+(2*x), -1+(2*y), 1+(2*z)),
-        (1+(2*x), 1+(2*y), 1+(2*z)),
+        (1+(2*x), 1+(2*y), 1+(2*z)),##
+        (1+(2*x), -1+(2*y), 1+(2*z)),#
+        (-1+(2*x), -1+(2*y), -1+(2*z)),#
+        (-1+(2*x), 1+(2*y), -1+(2*z)),##
         (-1+(2*x), -1+(2*y), 1+(2*z)),
         (-1+(2*x), 1+(2*y), 1+(2*z))
         )
     return(vertices)
 
-print(verts(1, 0, 0, 1))
+#print(verts(1, 0, 0, 1))
 
 
 
@@ -72,35 +71,21 @@ edges = (
     (5,7)
     )
 
-colors = (
-    (1,0,0),
-    (0,1,0),
-    (0,0,1),
-    (0,1,0),
-    (1,1,1),
-    (0,1,1),
-    (1,0,0),
-    (0,1,0),
-    (0,0,1),
-    (1,0,0),
-    (1,1,1),
-    (0,1,1),
-    )
-
+#bump these over one number to rotate texture
 surfaces = (
-    (0,1,2,3),
-    (3,2,7,6),
-    (6,7,5,4),
-    (4,5,1,0),
-    (1,5,7,2),
-    (4,0,3,6)
+    (0,1,2,3),#RIGHT
+    (6,3,2,7),#TOP
+    (5,4,6,7),#LEFT
+    (0,4,5,1),#BOTTOM
+    (1,5,7,2),#BACK
+    (4,0,3,6)#FRONT
     )
 
 
 forced = False
 def Cube(vx,vy,vz,block):
     glEnable(GL_CULL_FACE)
-    glCullFace(GL_FRONT)
+    glCullFace(GL_BACK)
     glEnable(GL_TEXTURE_2D)
     if not forced:
         glBegin(GL_QUADS)
@@ -110,9 +95,8 @@ def Cube(vx,vy,vz,block):
             y+=1
             for vertex in surface:
                 x+=1
-                #glColor3fv(colors[x])
                 glTexCoord2f(block[y-1][2*(x-1)], block[y-1][(2*x)-1])
-                #print(block[y-1][2*(x-1)], block[y-1][(2*x)-1])
+                ###this below needs to list face points in CCW order from the bottom left!!
                 glVertex3fv(verts(vx,vy,vz,1)[vertex])
         glEnd()
 

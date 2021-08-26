@@ -12,7 +12,8 @@ import sys
 
 #block type names and location on template go here
 BLOCK1 = functions.tex_coords((3, 0), (3, 0), (3, 0))
-
+DIRT = functions.tex_coords((0, 1), (0, 1), (0, 1))
+print(BLOCK1)
 
 pygame.init()
 display = (800, 600)
@@ -133,7 +134,7 @@ while run:
 
         glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
 
-        scree.blit(functions.update_fps(), (10,0))
+        ###scree.blit(functions.update_fps(), (10,0))
 
         glPushMatrix()
 
@@ -143,7 +144,7 @@ while run:
         functions.Cube(0,1,0,BLOCK1)
         functions.Cube(0,0,1,BLOCK1)
         functions.Cube(-2,0,0,BLOCK1)
-        functions.Cube(0,0,3,BLOCK1)
+        functions.Cube(0,0,3,DIRT)
         #functions.Cube(0,-0.5,0,BLOCK1)
         """
         glDisable(GL_CULL_FACE)
