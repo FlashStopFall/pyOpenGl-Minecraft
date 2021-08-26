@@ -65,6 +65,7 @@ pygame.mouse.set_pos(displayCenter)
 
 functions.loadTexture()
 
+steveViewz = 0
 up_down_angle = 0.0
 paused = False
 run = True
@@ -108,10 +109,14 @@ while run:
             glTranslatef(-0.1,0,0)
         if keypress[pygame.K_a]:
             glTranslatef(0.1,0,0)
-        if keypress[pygame.K_LSHIFT]:
+        if keypress[pygame.K_LSHIFT] and steveViewz > 0:
             glTranslatef(0,0.5,0)
+            steveViewz -= 0.5
+            print(steveViewz)
         if keypress[pygame.K_SPACE]:
             glTranslatef(0,-0.5,0)
+            steveViewz += 0.5
+            print(steveViewz)
 
         # apply the left and right rotation
         glRotatef(mouseMove[0]*0.1, 0.0, 1.0, 0.0)
@@ -132,15 +137,15 @@ while run:
 
         glPushMatrix()
 
-        glEnable(GL_CULL_FACE)
-        glCullFace(GL_FRONT)
-        glEnable(GL_TEXTURE_2D)
+        
         functions.Cube(0,0,0,BLOCK1)
         functions.Cube(1,0,0,BLOCK1)
         functions.Cube(0,1,0,BLOCK1)
         functions.Cube(0,0,1,BLOCK1)
         functions.Cube(-2,0,0,BLOCK1)
-
+        functions.Cube(0,0,3,BLOCK1)
+        #functions.Cube(0,-0.5,0,BLOCK1)
+        """
         glDisable(GL_CULL_FACE)
         glDisable(GL_TEXTURE_2D)
         glColor4f(0.5, 0.5, 0.5, 1)
@@ -149,7 +154,10 @@ while run:
         glVertex3f(10, -10, -1)
         glVertex3f(10, 10, -1)
         glVertex3f(-10, 10, -1)
-        glEnd()
+        glEnd()"""
+
+        functions.Plane((-10, -10, -1), (10, -10, -1), (10, 10, -1), (-10, 10, -1), False)
+
         """
         glEnable(GL_CULL_FACE)
         glCullFace(GL_BACK)
@@ -167,7 +175,6 @@ while run:
         
         clock.tick(60)
         pygame.display.flip()
-        print(clock.get_fps())
-        #pygame.time.wait(10)
+        #print(int(clock.get_fps()))
 
 pygame.quit()

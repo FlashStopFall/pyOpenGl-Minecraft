@@ -53,7 +53,7 @@ def verts(x, y, z, n):
         )
     return(vertices)
 
-print(verts(0, 0, 0, 1))
+print(verts(1, 0, 0, 1))
 
 
 
@@ -99,6 +99,9 @@ surfaces = (
 
 forced = False
 def Cube(vx,vy,vz,block):
+    glEnable(GL_CULL_FACE)
+    glCullFace(GL_FRONT)
+    glEnable(GL_TEXTURE_2D)
     if not forced:
         glBegin(GL_QUADS)
         y = 0
@@ -114,7 +117,7 @@ def Cube(vx,vy,vz,block):
         glEnd()
 
 
-        
+        glDisable(GL_TEXTURE_2D)
         glBegin(GL_LINES)
         for edge in edges:
             for vertex in edge:
@@ -133,6 +136,19 @@ def Cube(vx,vy,vz,block):
         glTexCoord2f(0.0+texX, 0.25)
         glVertex3f(-1.0,  1.0,  1.0)
         glEnd()
+
+
+def Plane(tl, tr, bl, br, culling):
+    glDisable(GL_CULL_FACE)
+    glDisable(GL_TEXTURE_2D)
+    glColor4f(0.5, 0.5, 0.5, 1)
+    glBegin(GL_QUADS)
+    glVertex3f(tl[0], tl[1], tl[2])
+    glVertex3f(tr[0], tr[1],  tr[2])
+    glVertex3f(bl[0], bl[1], bl[2])
+    glVertex3f(br[0], br[1], br[2])
+    glEnd()
+
 
 def loadTexture():
     textureSurface = pygame.image.load('texture2.png')
