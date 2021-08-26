@@ -8,7 +8,7 @@ import math
 import functions
 import sys
 
-
+cube = functions.CubeClass()
 
 #block type names and location on template go here
 BLOCK1 = functions.tex_coords((3, 0), (3, 0), (3, 0))
@@ -110,7 +110,7 @@ while run:
             glTranslatef(-0.1,0,0)
         if keypress[pygame.K_a]:
             glTranslatef(0.1,0,0)
-        if keypress[pygame.K_LSHIFT] and steveViewz > 0:
+        if keypress[pygame.K_LSHIFT] and steveViewz > -5:
             glTranslatef(0,0.5,0)
             steveViewz -= 0.5
             print(steveViewz)
@@ -138,13 +138,23 @@ while run:
 
         glPushMatrix()
 
+
+        cube.Cube(0,0,0,BLOCK1)
+
         
-        functions.Cube(0,0,0,BLOCK1)
-        functions.Cube(1,0,0,BLOCK1)
-        functions.Cube(0,1,0,BLOCK1)
-        functions.Cube(0,0,1,BLOCK1)
-        functions.Cube(-2,0,0,BLOCK1)
-        functions.Cube(0,0,3,DIRT)
+        cube.Cube(0,0,0,BLOCK1)
+        cube.Cube(1,0,0,BLOCK1)
+        cube.Cube(0,1,0,BLOCK1)
+        cube.Cube(0,0,1,BLOCK1)
+        cube.Cube(-2,0,0,BLOCK1)
+
+        for i in range(10):
+            cube.Cube(i-5,-5,0,DIRT)
+            cube.Cube(-5,i-5,0,DIRT)
+            cube.Cube(i-5,4,0,DIRT)
+            cube.Cube(4,i-5,0,DIRT)
+
+
         #functions.Cube(0,-0.5,0,BLOCK1)
         """
         glDisable(GL_CULL_FACE)

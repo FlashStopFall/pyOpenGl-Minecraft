@@ -83,43 +83,45 @@ surfaces = (
 
 
 forced = False
-def Cube(vx,vy,vz,block):
-    glEnable(GL_CULL_FACE)
-    glCullFace(GL_BACK)
-    glEnable(GL_TEXTURE_2D)
-    if not forced:
-        glBegin(GL_QUADS)
-        y = 0
-        for surface in surfaces:
-            x = 0
-            y+=1
-            for vertex in surface:
-                x+=1
-                glTexCoord2f(block[y-1][2*(x-1)], block[y-1][(2*x)-1])
-                ###this below needs to list face points in CCW order from the bottom left!!
-                glVertex3fv(verts(vx,vy,vz,1)[vertex])
-        glEnd()
+
+class CubeClass:
+    def Cube(self,vx,vy,vz,block):
+        glEnable(GL_CULL_FACE)
+        glCullFace(GL_BACK)
+        glEnable(GL_TEXTURE_2D)
+        if not forced:
+            glBegin(GL_QUADS)
+            y = 0
+            for surface in surfaces:
+                x = 0
+                y+=1
+                for vertex in surface:
+                    x+=1
+                    glTexCoord2f(block[y-1][2*(x-1)], block[y-1][(2*x)-1])
+                    ###this below needs to list face points in CCW order from the bottom left!!
+                    glVertex3fv(verts(vx+0.5,vy+0.5,vz,1)[vertex])
+            glEnd()
 
 
-        glDisable(GL_TEXTURE_2D)
-        glBegin(GL_LINES)
-        for edge in edges:
-            for vertex in edge:
-                glVertex3fv(verts(vx,vy,vz,1)[vertex])
-        glEnd()
-    else:
-        texX = 0.75
-        texY = 0.25
-        glBegin(GL_QUADS)
-        glTexCoord2f(0.0+texX, 0.0)
-        glVertex3f(-1.0, -1.0,  1.0)
-        glTexCoord2f(0.25+texX, 0.0)
-        glVertex3f(1.0, -1.0,  1.0)
-        glTexCoord2f(0.25+texX, 0.25)
-        glVertex3f(1.0,  1.0,  1.0)
-        glTexCoord2f(0.0+texX, 0.25)
-        glVertex3f(-1.0,  1.0,  1.0)
-        glEnd()
+            glDisable(GL_TEXTURE_2D)
+            glBegin(GL_LINES)
+            for edge in edges:
+                for vertex in edge:
+                    glVertex3fv(verts(vx+0.5,vy+0.5,vz,1)[vertex])
+            glEnd()
+        else:
+            texX = 0.75
+            texY = 0.25
+            glBegin(GL_QUADS)
+            glTexCoord2f(0.0+texX, 0.0)
+            glVertex3f(-1.0, -1.0,  1.0)
+            glTexCoord2f(0.25+texX, 0.0)
+            glVertex3f(1.0, -1.0,  1.0)
+            glTexCoord2f(0.25+texX, 0.25)
+            glVertex3f(1.0,  1.0,  1.0)
+            glTexCoord2f(0.0+texX, 0.25)
+            glVertex3f(-1.0,  1.0,  1.0)
+            glEnd()
 
 
 def Plane(tl, tr, bl, br, culling):
